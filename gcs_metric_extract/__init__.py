@@ -84,5 +84,17 @@ def total_bytes(project_ids):
                            metric_labels)
 
 
+@main.command(help="Get any metric. "
+              "Give multiple METRIC_LABELS as quoted, comma delimited list.")
+@click.argument("metric_url", nargs=1)
+@click.argument("resource_label", nargs=1)
+@click.argument("metric_labels", nargs=1)
+@click.argument("project_ids", nargs=-1)
+def get_metric(metric_url, resource_label, metric_labels, project_ids):
+    metric_labels = metric_labels.split(",")
+    return default_command(OPTIONS, project_ids, metric_url, resource_label,
+                           metric_labels)
+
+
 if __name__ == '__main__':
     main()

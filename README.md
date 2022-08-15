@@ -25,6 +25,7 @@ Options:
 
 Commands:
   api-request-count
+  get-metric          Get any metric.
   object-count
   total-byte-seconds
   total-bytes
@@ -115,6 +116,14 @@ myProject,myBucket,"GetObjectMetadata,UNAUTHENTICATED",2022-08-12 06:53:00,0
 myProject,myBucket,"ListObjects,UNAUTHENTICATED",2022-08-12 06:53:00,1
 myProject,myBucket,"ListObjects,UNAUTHENTICATED",2022-08-12 06:52:00,0
 ```
+
+Finally, with a more involved command you can request any metric in a similar way. This hasn't been tested with every metric, so it may break, but most of them are similarly structured for GCS.
+
+```shell
+gcs_metric_extract --format csv --lookback $((60*120)) --points -1 get-metric storage.googleapis.com/api/request_count bucket_name "method,response_code" $(gcloud config get project)
+```
+
+The above gets the API request counts, similar to the `api-request-count` command.
 
 
 ## Requirements
