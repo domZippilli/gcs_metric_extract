@@ -159,6 +159,10 @@ def _get_metric_type(enum_value: int) -> str:
     raise Exception("Unsupported metric value type.")
 
 
+def _unpack_value(point, metric):
+    return getattr(point.value, _get_metric_type(metric.value_type) + "_value")
+
+
 def _report_last_N(time_series_response,
                    resource_label: str,
                    metric_labels: List[str],
@@ -194,17 +198,18 @@ def _report_last_N(time_series_response,
         metric_labels_deref = []
         for label in metric_labels:
             metric_labels_deref.append(metric.metric.labels[label])
-        value_type = _get_metric_type(metric.value_type)
+        combined_metric_label = ",".join(metric_labels_deref)
+        # we do not want to overwrite, so check that now before continuing
+        if combined_metric_label in report[resource_grouping].keys():
+            continue
         # produce an array of the last N points, where point is endtime: value
-        # TODO: This might be broken for pagination. Since the results come in
-        # descending order by date, a new page may overwrite newer points.
         last_n_points = []
         for point in metric.points[:n]:
-            value = getattr(point.value, value_type + "_value")
+            # the getter is typed, like int64_value
+            value = _unpack_value(point, metric)
             end_epoch = point.interval.end_time.seconds
             end_datetime = str(datetime.utcfromtimestamp(int(end_epoch)))
             last_n_points.append({end_datetime: value})
         # store the data in the report
-        report[resource_grouping][",".join(
-            metric_labels_deref)] = last_n_points
+        report[resource_grouping][combined_metric_label] = last_n_points
     return report
