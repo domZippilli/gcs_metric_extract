@@ -44,7 +44,7 @@ def main(format: str, lookback: int, points: int):
     OPTIONS["POINTS"] = points
 
 
-@main.command()
+@main.command(help="Get the number of API calls made against a bucket.")
 @click.argument("project_ids", nargs=-1)
 def api_request_count(project_ids):
     metric_url = "storage.googleapis.com/api/request_count"
@@ -54,7 +54,7 @@ def api_request_count(project_ids):
                            metric_labels)
 
 
-@main.command()
+@main.command(help="Get the number of objects in a bucket.")
 @click.argument("project_ids", nargs=-1)
 def object_count(project_ids):
     metric_url = "storage.googleapis.com/storage/object_count"
@@ -64,7 +64,7 @@ def object_count(project_ids):
                            metric_labels)
 
 
-@main.command()
+@main.command(help="Get the number of byte-seconds used by a bucket.")
 @click.argument("project_ids", nargs=-1)
 def total_byte_seconds(project_ids):
     metric_url = "storage.googleapis.com/storage/total_byte_seconds"
@@ -74,7 +74,7 @@ def total_byte_seconds(project_ids):
                            metric_labels)
 
 
-@main.command()
+@main.command(help="Get the number of bytes stored in a bucket.")
 @click.argument("project_ids", nargs=-1)
 def total_bytes(project_ids):
     metric_url = "storage.googleapis.com/storage/total_bytes"
@@ -84,7 +84,7 @@ def total_bytes(project_ids):
                            metric_labels)
 
 
-@main.command(help="Get any metric. "
+@main.command(help="Get any GCS metric. "
               "Give multiple METRIC_LABELS as quoted, comma delimited list.")
 @click.argument("metric_url", nargs=1)
 @click.argument("resource_label", nargs=1)

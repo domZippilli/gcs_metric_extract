@@ -24,11 +24,11 @@ Options:
   --help              Show this message and exit.
 
 Commands:
-  api-request-count
-  get-metric          Get any metric.
-  object-count
-  total-byte-seconds
-  total-bytes
+  api-request-count   Get the number of API calls made against a bucket.
+  get-metric          Get any GCS metric.
+  object-count        Get the number of objects in a bucket.
+  total-byte-seconds  Get the number of byte-seconds used by a bucket.
+  total-bytes         Get the number of bytes stored in a bucket.
 ```
 
 As an example, here's how to get each bucket's bytes, grouped by storage class, 
